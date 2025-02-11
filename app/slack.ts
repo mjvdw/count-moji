@@ -5,13 +5,7 @@ class Slack {
       this.token = env("SGRC_SLACK_BOT_TOKEN") ?? "";
     }
 
-    getMessage() {
-        let url = "https://slack.com/api/conversations.history";
-        let params = {
-            headers: {
-                Authorization: `Bearer ${this.token}`
-
-            }
-        };
+    handleInteractivity(event: GoogleAppsScript.Events.DoPost) {
+        console.log(event.postData.contents);
     }
 }
