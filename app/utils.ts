@@ -5,6 +5,6 @@
  * @returns the value associated with that property key or null if the key doesn't exist.
  */
 function env(property: string): string | null {
-    let scriptProperties = PropertiesService.getScriptProperties();
-    return scriptProperties.getProperty(property);
-  }
+	let scriptProperties = PropertiesService.getScriptProperties();
+	return scriptProperties.getProperty(property);
+}

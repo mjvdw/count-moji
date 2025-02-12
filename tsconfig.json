@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "lib": [
+            "esnext"
+        ],
+        "types": [
+            "google-apps-script"
+        ],
+        "noImplicitAny": true,
+        "strict": true,
+        "experimentalDecorators": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

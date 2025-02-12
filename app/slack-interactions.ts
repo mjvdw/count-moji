@@ -16,7 +16,10 @@
  * @param {String} e A JSON-type string,
  * @returns
  */
-function doPost(e) {
+function doPost(e: GoogleAppsScript.Events.DoPost) {
+	console.log("Received a POST request");
+
+	// This is the entry point for all interactions with Slack.
 	var slack = new Slack();
 	slack.handleInteractivity(e);
 }
