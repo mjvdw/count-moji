@@ -1,11 +1,17 @@
 {
 	"timeZone": "Pacific/Auckland",
-	"dependencies": {},
+	"dependencies": {
+		"libraries": [
+			{
+				"userSymbol": "GASU",
+				"version": "0",
+				"libraryId": "156t8gtfLZeFJs-B6p6JnyUxQccqxgcjDQei9pEooEASLUqGEe9DTbTwH",
+				"developmentMode": true
+			}
+		]
+	},
 	"exceptionLogging": "STACKDRIVER",
 	"runtimeVersion": "V8",
-	"executionApi": {
-		"access": "MYSELF"
-	},
 	"webapp": {
 		"executeAs": "USER_DEPLOYING",
 		"access": "ANYONE_ANONYMOUS"
