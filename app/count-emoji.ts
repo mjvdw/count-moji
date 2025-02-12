@@ -1,5 +1,7 @@
 function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
-    let message = e.parameter.payload;
+    console.log("Received message");
+    console.log(JSON.parse(e.parameter.payload).user);
+    let message = JSON.parse(e.parameter.payload);
     let reactions = collectReactionsFromMessage(message);
 }
 
@@ -14,6 +16,8 @@ function collectReactionsFromMessage(message: { [key: string]: any }) {
         console.log(data);
 
         let reactions = data.message.reactions;
+
+        console.log(reactions);
 
         return reactions;
     }
