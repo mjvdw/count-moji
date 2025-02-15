@@ -3,25 +3,20 @@ function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
     // console.log(JSON.parse(e.parameter.payload).user);
     let message = JSON.parse(e.parameter.payload);
 
+    let reactions = collectReactionsFromMessage(message);
+    if (reactions == undefined) {
+        console.log("Error: Could not collect reactions");
+        return;
+    }
     try {
-        let reactions = collectReactionsFromMessage(message);
-        if (reactions == undefined) {
-            console.log("Error: Could not collect reactions");
-            return;
-        }
-
-        for (let reaction of reactions) {
-            console.log("People: ", reaction.people);
-            // console.log(reaction.emoji + ": " + reaction.people.map((person: { [key: string]: any }) => person.user.name).join(", "));
-        }
+        saveReactions(reactions);
     } catch (e) {
         console.log("Error: ", e);
-
     }
 }
 
 
-function collectReactionsFromMessage(message: { [key: string]: any }): Array<{ [key: string]: any }> | undefined {
+function collectReactionsFromMessage(message: { [key: string]: any }): [{ [key: string]: any }] | undefined {
     let slack = new GASU.connectSlack();
     let response = slack.getReactions(message);
 
@@ -48,3 +43,8 @@ function collectReactionsFromMessage(message: { [key: string]: any }): Array<{ [
         return reactions;
     }
 };
+
+
+function saveReactions(reactions: [{ [key: string]: any }]) {
+
+}
