@@ -1,3 +1,4 @@
+
 function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
     console.log("Received message");
     // console.log(JSON.parse(e.parameter.payload).user);
@@ -8,11 +9,13 @@ function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
         console.log("Error: Could not collect reactions");
         return;
     }
-    try {
-        saveReactions(reactions);
-    } catch (e) {
-        console.log("Error: ", e);
-    }
+
+    saveReactions(reactions);
+    let me = "U01MWDNBTJP";
+    let slack = new GASU.connectSlack();
+    slack.sendMessage("Yay it worked!", me);
+
+    console.log("Done");
 }
 
 
@@ -46,5 +49,6 @@ function collectReactionsFromMessage(message: { [key: string]: any }): [{ [key: 
 
 
 function saveReactions(reactions: [{ [key: string]: any }]) {
+
 
 }
