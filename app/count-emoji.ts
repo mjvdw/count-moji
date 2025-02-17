@@ -6,14 +6,15 @@ function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
 
     let reactions = collectReactionsFromMessage(message);
     if (reactions == undefined) {
-        console.log("Error: Could not collect reactions");
+        console.error("Error: Could not collect reactions");
         return;
     }
 
-    saveReactions(reactions);
+    let sheet = saveReactionsToSheet(reactions);
     let me = "U01MWDNBTJP";
     let slack = new GASU.connectSlack();
-    slack.sendMessage("Yay it worked!", me);
+    let slackMessage = GASU.blockComponents().markdown("Yay it worked! [Here's](" + sheet.getUrl() + ") the link.");
+    slack.sendMessage([slackMessage], me);
 
     console.log("Done");
 }
@@ -48,7 +49,24 @@ function collectReactionsFromMessage(message: { [key: string]: any }): [{ [key: 
 };
 
 
-function saveReactions(reactions: [{ [key: string]: any }]) {
+function saveReactionsToSheet(reactions: [{ [key: string]: any }]) {
+    let d = new Date();
+    let seconds = Math.round(d.getTime() / 1000);
+    let sheetName = "Count Moji - " + seconds;
+    let sheet = SpreadsheetApp.create(sheetName);
 
+    let header = ["Emoji", "Name", "Real Name", "Email"];
+    sheet.appendRow(header);
 
+    reactions.forEach((reaction: any) => {
+        let emoji = reaction.emoji;
+        let people = reaction.people;
+
+        people.forEach((person: any) => {
+            let row = [emoji, person.name, person.real_name, person.profile.email];
+            sheet.appendRow(row);
+        });
+    });
+
+    return sheet
 }
