@@ -1,7 +1,5 @@
 
 function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
-    console.log("Received message");
-    // console.log(JSON.parse(e.parameter.payload).user);
     let message = JSON.parse(e.parameter.payload);
 
     let reactions = collectReactionsFromMessage(message);
@@ -13,10 +11,8 @@ function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
     let sheet = saveReactionsToSheet(reactions);
     let me = "U01MWDNBTJP";
     let slack = new GASU.connectSlack();
-    let slackMessage = GASU.blockComponents().markdown("Yay it worked! [Here's](" + sheet.getUrl() + ") the link.");
+    let slackMessage = GASU.blockComponents().markdown("I counted your 'moji! <" + sheet.getUrl() + "|Here's> a link to your spreadsheet. :tada:");
     slack.sendMessage([slackMessage], me);
-
-    console.log("Done");
 }
 
 
@@ -55,7 +51,7 @@ function saveReactionsToSheet(reactions: [{ [key: string]: any }]) {
     let sheetName = "Count Moji - " + seconds;
     let sheet = SpreadsheetApp.create(sheetName);
 
-    let header = ["Emoji", "Name", "Real Name", "Email"];
+    let header = ["Emoji", "Slack Handle", "Name", "Email"];
     sheet.appendRow(header);
 
     reactions.forEach((reaction: any) => {
@@ -63,7 +59,7 @@ function saveReactionsToSheet(reactions: [{ [key: string]: any }]) {
         let people = reaction.people;
 
         people.forEach((person: any) => {
-            let row = [emoji, person.name, person.real_name, person.profile.email];
+            let row = [emoji, person.profile.display_name, person.profile.real_name, person.profile.email];
             sheet.appendRow(row);
         });
     });
