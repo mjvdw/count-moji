@@ -13,7 +13,11 @@
 	"exceptionLogging": "STACKDRIVER",
 	"runtimeVersion": "V8",
 	"webapp": {
-		"executeAs": "USER_DEPLOYING",
-		"access": "ANYONE_ANONYMOUS"
-	}
+		"executeAs": "USER_ACCESSING",
+		"access": "DOMAIN"
+	},
+	"oauthScopes": [
+		"https://www.googleapis.com/auth/drive",
+		"https://www.googleapis.com/auth/spreadsheets"
+	]
 }

@@ -1,6 +1,8 @@
 
 function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
+
     let message = JSON.parse(e.parameter.payload);
+    console.log(message);
 
     let reactions = collectReactionsFromMessage(message);
     if (reactions == undefined) {
@@ -9,10 +11,10 @@ function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
     }
 
     let sheet = saveReactionsToSheet(reactions);
-    let me = "U01MWDNBTJP";
+    let user = message.user;
     let slack = new GASU.connectSlack();
     let slackMessage = GASU.blockComponents().markdown("I counted your 'moji! <" + sheet.getUrl() + "|Here's> a link to your spreadsheet. :tada:");
-    slack.sendMessage([slackMessage], me);
+    slack.sendMessage([slackMessage], user.id);
 }
 
 
@@ -50,6 +52,11 @@ function saveReactionsToSheet(reactions: [{ [key: string]: any }]) {
     let seconds = Math.round(d.getTime() / 1000);
     let sheetName = "Count Moji - " + seconds;
     let sheet = SpreadsheetApp.create(sheetName);
+
+    let folderName = "Count Moji";
+    let destinationExists = DriveApp.getRootFolder().getFoldersByName(folderName).hasNext();
+    let destination = destinationExists ? DriveApp.getRootFolder().getFoldersByName(folderName).next() : DriveApp.getRootFolder().createFolder(folderName);
+    DriveApp.getFileById(sheet.getId()).moveTo(destination);
 
     let header = ["Emoji", "Slack Handle", "Name", "Email"];
     sheet.appendRow(header);
