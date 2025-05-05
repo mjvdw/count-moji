@@ -12,14 +12,19 @@ function receiveMessage(e: GoogleAppsScript.Events.DoPost) {
 
     let sheet = saveReactionsToSheet(reactions);
     let user = message.user;
-    let slack = new GASU.connectSlack();
+
+    let scriptProperties = PropertiesService.getScriptProperties();
+    let token = scriptProperties.getProperty("SLACK_BOT_TOKEN");
+    let slack = new GASU.connectSlack(token);
     let slackMessage = GASU.blockComponents().markdown("I counted your 'moji! <" + sheet.getUrl() + "|Here's> a link to your spreadsheet. :tada:");
     slack.sendMessage([slackMessage], user.id);
 }
 
 
 function collectReactionsFromMessage(message: { [key: string]: any }): [{ [key: string]: any }] | undefined {
-    let slack = new GASU.connectSlack();
+    let scriptProperties = PropertiesService.getScriptProperties();
+    let token = scriptProperties.getProperty("SLACK_BOT_TOKEN");
+    let slack = new GASU.connectSlack(token);
     let response = slack.getReactions(message);
 
     if (response.getResponseCode() == 200) {
